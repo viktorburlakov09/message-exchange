@@ -27,3 +27,7 @@ consumer: build
 
 producer: build
 	./$(BUILD_DIR)/producer_app
+
+
+mypipe:
+	mkfifo my_pipe

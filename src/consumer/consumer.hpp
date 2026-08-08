@@ -1,7 +1,4 @@
-#ifndef CONSUMER_HPP
-
-#define CONSUMER_HPP
-
+#pragma once
 
 #include <string>
 
@@ -14,6 +11,3 @@ class Consumer {
         void print();
         Consumer(std::string* name);
 };
-
-
-#endif

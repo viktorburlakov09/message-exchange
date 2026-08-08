@@ -42,5 +42,11 @@
             ]
         }
 
+    ],
+     "compounds": [
+            {
+                "name": "Run Producer & Consumer",
+                "configurations": ["Debug Consumer", "Debug Producer"]
+            }
     ]
 }

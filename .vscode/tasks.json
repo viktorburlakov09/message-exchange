@@ -4,18 +4,13 @@
         {
             "type": "shell",
             "label": "Build C++ Project",
-            "command": "make",
-            "args": [
-                "build"
-            ],
+            "command": "cmake --version && rm -rf build && mkdir build && cd build && cmake .. && make",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "detail": "Task generated for Makefile."
+            "problemMatcher": ["$gcc"],
+            "detail": "Task generated to build core_lib, consumer_app, and producer_app via CMake."
         }
     ]
 }

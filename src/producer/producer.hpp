@@ -1,7 +1,4 @@
-#ifndef CONSUMER_HPP
-
-#define CONSUMER_HPP
-
+#pragma once
 
 #include <string>
 
@@ -12,9 +9,6 @@ class Producer {
     
     public:
         void print();
+
         Producer(std::string* name);
 };
-
-
-#endif
-    
