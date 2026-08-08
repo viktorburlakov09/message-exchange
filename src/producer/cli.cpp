@@ -7,9 +7,12 @@
 #include <common/broker/transports/namedpipe.hpp>
 #include <common/broker/broker.hpp>
 #include <common/args.hpp>
+#include <common/signal_handler.hpp>
 
 
 int main(int argc, char* argv[]) {
+    SignalHandler sig_handler;
+
     Utils::ARGS::CommandLineArgs parser(argc, argv);
     parser.add_option("--pipe", "string");
     parser.add_option("--size", "size_t");

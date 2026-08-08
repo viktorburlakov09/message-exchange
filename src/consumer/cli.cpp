@@ -6,15 +6,18 @@
 #include <common/broker/transports/namedpipe.hpp>
 #include <common/broker/broker.hpp>
 #include <common/args.hpp>
+#include <common/signal_handler.hpp>
 
 
 int main(int argc, char* argv[]) {
+    SignalHandler sig_handler;
+
     Utils::ARGS::CommandLineArgs parser(argc, argv);
     parser.add_option("--pipe", "string");
 
     std::string pipe_name = parser.get_string("--pipe", "my_pipe");
 
-    PosixPipeTransport transport(pipe_name);
+    PosixPipeTransport transport(pipe_name, O_RDONLY | O_NONBLOCK);
     MessageBroker broker(&transport);
     Consumer consumer(&broker);
 

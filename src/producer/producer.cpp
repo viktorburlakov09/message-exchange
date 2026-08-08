@@ -6,7 +6,8 @@
 #include <random>
 #include <thread>
 #include <bytes.hpp>
-#include <control.hpp>
+#include <signal_handler.hpp>
+#include <keyboard_handler.hpp>
 
 
 Producer::Producer(Broker* broker, size_t packet_size) {
@@ -17,13 +18,12 @@ Producer::Producer(Broker* broker, size_t packet_size) {
 }
 
 
-void Producer::loop()
-{
-    ControlHandler control;
+void Producer::loop() {
+    KeyboardHandler key_handler;
 
     int i = 0;
-    while (control.is_running() && i < 100) {
-        if (control.paused()) {
+    while (!SignalHandler::is_shutdown() && key_handler.is_running()) {
+       if (key_handler.is_paused()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }

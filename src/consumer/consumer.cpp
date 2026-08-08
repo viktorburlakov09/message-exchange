@@ -7,7 +7,8 @@
 #include <broker.hpp>
 #include <thread>
 #include <common/bytes.hpp>
-#include <control.hpp>
+#include <keyboard_handler.hpp>
+#include <signal_handler.hpp>
 
 
 Consumer::Consumer(Broker* broker) {
@@ -18,12 +19,12 @@ Consumer::Consumer(Broker* broker) {
 
 
 void Consumer::loop() {
-    ControlHandler control;
+    KeyboardHandler key_handler;
 
     int i = 0;
 
-    while (control.is_running() && i < 100) {
-        if (control.paused()) {
+    while (!SignalHandler::is_shutdown() && key_handler.is_running()) {
+        if (key_handler.is_paused()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
@@ -36,8 +37,6 @@ void Consumer::loop() {
             std::cout << "Data: ";
             
             Utils::Bytes::print_bytes(buffer, received_size);
-        } else {
-            std::cerr << "Failed to receive message.\n";
         }
 
         i++;
