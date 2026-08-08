@@ -5,27 +5,21 @@
 #include "consumer.hpp"
 #include <common/broker/transports/namedpipe.hpp>
 #include <common/broker/broker.hpp>
+#include <common/args.hpp>
 
 
 int main(int argc, char* argv[]) {
-    std::string name = "Consumer-Node";
-    Consumer c(&name);
-    c.print();
+    Utils::ARGS::CommandLineArgs parser(argc, argv);
+    parser.add_option("--pipe", "string");
 
-    PosixPipeTransport transport("my_pipe");
+    std::string pipe_name = parser.get_string("--pipe", "my_pipe");
+
+    PosixPipeTransport transport(pipe_name);
     MessageBroker broker(&transport);
+    Consumer consumer(&broker);
 
     std::cout << "Receiving message...\n";
-    
-    char buffer[256] = {0};
-    size_t received_size = 0;
-
-    if (broker.recv(buffer, sizeof(buffer), received_size)) {
-        std::cout << "Message received successfully! (" << received_size << " bytes)\n";
-        std::cout << "Data: " << buffer << "\n";
-    } else {
-        std::cerr << "Failed to receive message.\n";
-    }
+    consumer.loop();
 
     return 0;
 }

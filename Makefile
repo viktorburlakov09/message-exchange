@@ -22,11 +22,11 @@ clean:
 
 
 consumer: build
-	./$(BUILD_DIR)/consumer_app
+	./$(BUILD_DIR)/consumer_app --pipe my_pipe
 
 
 producer: build
-	./$(BUILD_DIR)/producer_app
+	./$(BUILD_DIR)/producer_app --pipe my_pipe --size 10
 
 
 mypipe:

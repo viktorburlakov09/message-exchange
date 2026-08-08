@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <common/broker/broker.hpp>
 
 
 class Consumer {
     private:
-        std::string name;
-    
+        Broker* broker;
+
     public:
-        void print();
-        Consumer(std::string* name);
+        Consumer(Broker* broker);
+        void loop();
 };

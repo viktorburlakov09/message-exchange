@@ -6,24 +6,24 @@
 #include <fcntl.h>
 #include <common/broker/transports/namedpipe.hpp>
 #include <common/broker/broker.hpp>
+#include <common/args.hpp>
 
 
-int main() {
-    std::string name = "333";
+int main(int argc, char* argv[]) {
+    Utils::ARGS::CommandLineArgs parser(argc, argv);
+    parser.add_option("--pipe", "string");
+    parser.add_option("--size", "size_t");
 
-    PosixPipeTransport transport("my_pipe");
+    std::string pipe_name = parser.get_string("--pipe", "my_pipe");
+    size_t packet_size = parser.get_size_t("--size", 10);
+
+    PosixPipeTransport transport(pipe_name);
     MessageBroker broker(&transport);
+    Producer producer(&broker, packet_size);
 
-    std::string message = "Hello from Producer";
-    
     std::cout << "Sending message...\n";
     
-    if (broker.send(message.c_str(), message.size() + 1)) {
-        std::cout << "Message sent successfully!\n";
-    } else {
-        std::cerr << "Failed to send message.\n";
-    }
-
+    producer.loop();
     
     return 0;
 }
