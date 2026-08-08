@@ -26,7 +26,7 @@ consumer: build
 
 
 producer: build
-	./$(BUILD_DIR)/producer_app --pipe my_pipe --size 10
+	./$(BUILD_DIR)/producer_app --pipe my_pipe --size 8192
 
 
 mypipe:

@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     std::string pipe_name = parser.get_string("--pipe", "my_pipe");
 
-    PosixPipeTransport transport(pipe_name, O_RDONLY | O_NONBLOCK);
+    PosixPipeTransport transport(pipe_name, O_RDONLY);
     MessageBroker broker(&transport);
     Consumer consumer(&broker);
 

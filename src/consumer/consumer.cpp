@@ -9,6 +9,7 @@
 #include <common/bytes.hpp>
 #include <keyboard_handler.hpp>
 #include <signal_handler.hpp>
+#include <stats.hpp>
 
 
 Consumer::Consumer(Broker* broker) {
@@ -20,6 +21,7 @@ Consumer::Consumer(Broker* broker) {
 
 void Consumer::loop() {
     KeyboardHandler key_handler;
+    TrafficStats stats("[Consumer]");
 
     int i = 0;
 
@@ -29,18 +31,19 @@ void Consumer::loop() {
             continue;
         }
 
-        std::vector<uint8_t> buffer(256);
+        std::vector<uint8_t> buffer(8192);
         size_t received_size = 0;
 
         if (this->broker->recv(buffer.data(), buffer.size(), received_size)) {
-            std::cout << "Message received successfully! (" << received_size << " bytes)\n";
-            std::cout << "Data: ";
-            
-            Utils::Bytes::print_bytes(buffer, received_size);
+            stats.add_packet(received_size);
+            // std::cout << "Message received successfully! (" << received_size << " bytes)\n";
+            // std::cout << "Data: ";
+            // Utils::Bytes::print_bytes(buffer, received_size);
         }
 
+        stats.update();
         i++;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     std::cout << "[Consumer] Finished work.\n";

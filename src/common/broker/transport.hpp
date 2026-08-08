@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#define MAX_SIZE 255
+#define MAX_SIZE 8192
 
 
 #pragma pack(push, 1)

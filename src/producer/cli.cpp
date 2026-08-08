@@ -7,7 +7,7 @@
 #include <common/broker/transports/namedpipe.hpp>
 #include <common/broker/broker.hpp>
 #include <common/args.hpp>
-#include <common/signal_handler.hpp>
+#include <signal_handler.hpp>
 
 
 int main(int argc, char* argv[]) {

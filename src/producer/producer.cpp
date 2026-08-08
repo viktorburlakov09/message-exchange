@@ -33,14 +33,14 @@ void Producer::loop() {
         bool success = this->broker->send(payload.data(), payload.size());
         
         if (success) {
-            std::cout << "[Producer] Sent packet #" << (i + 1) << " of size " << this->packet_size << " bytes.\n";
-            Utils::Bytes::print_bytes(payload, this->packet_size);
+            // std::cout << "[Producer] Sent packet #" << (i + 1) << " of size " << this->packet_size << " bytes.\n";
+            // Utils::Bytes::print_bytes(payload, this->packet_size);
         } else {
             std::cerr << "[Producer] Failed to send packet #" << (i + 1) << "\n";
         }
 
         i++;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     std::cout << "[Producer] Finished work.\n";

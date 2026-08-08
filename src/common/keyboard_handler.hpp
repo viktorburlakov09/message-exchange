@@ -18,15 +18,17 @@ class KeyboardHandler {
 
             while (running) {
                 std::getline(std::cin, line);
-                if (!running) break;
+                if (!this->running) {
+                    break;
+                }
 
                 if (line == "exit") {
                     running = false;
                     break;
                 }
 
-                paused = !paused;
-                if (paused) {
+                this->paused = !this->paused;
+                if (this->paused) {
                     std::cout << "[Keyboard] >>> PAUSED. Press [Enter] to resume.\n";
                 } else {
                     std::cout << "[Keyboard] >>> RESUMED.\n";
@@ -36,22 +38,22 @@ class KeyboardHandler {
 
     public:
         KeyboardHandler() {
-            input_thread = std::thread(&KeyboardHandler::listen_loop, this);
+            this->input_thread = std::thread(&KeyboardHandler::listen_loop, this);
         }
 
         ~KeyboardHandler() {
-            running = false;
+            this->running = false;
 
-            if (input_thread.joinable()) {
-                input_thread.join();
+            if (this->input_thread.joinable()) {
+                this->input_thread.join();
             }
         }
 
         bool is_paused() const {
-            return paused.load();
+            return this->paused.load();
         }
 
         bool is_running() const {
-            return running.load();
+            return this->running.load();
         }
 };
