@@ -7,6 +7,7 @@
 #include <broker.hpp>
 #include <thread>
 #include <common/bytes.hpp>
+#include <control.hpp>
 
 
 Consumer::Consumer(Broker* broker) {
@@ -17,7 +18,16 @@ Consumer::Consumer(Broker* broker) {
 
 
 void Consumer::loop() {
-    for (int i = 0; i < 10; ++i) {
+    ControlHandler control;
+
+    int i = 0;
+
+    while (control.is_running() && i < 100) {
+        if (control.paused()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            continue;
+        }
+
         std::vector<uint8_t> buffer(256);
         size_t received_size = 0;
 
@@ -30,6 +40,7 @@ void Consumer::loop() {
             std::cerr << "Failed to receive message.\n";
         }
 
+        i++;
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 

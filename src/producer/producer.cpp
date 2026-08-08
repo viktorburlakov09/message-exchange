@@ -6,6 +6,7 @@
 #include <random>
 #include <thread>
 #include <bytes.hpp>
+#include <control.hpp>
 
 
 Producer::Producer(Broker* broker, size_t packet_size) {
@@ -18,7 +19,15 @@ Producer::Producer(Broker* broker, size_t packet_size) {
 
 void Producer::loop()
 {
-    for (int i = 0; i < 10; ++i) {
+    ControlHandler control;
+
+    int i = 0;
+    while (control.is_running() && i < 100) {
+        if (control.paused()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            continue;
+        }
+
         auto payload = generate_random_bytes(packet_size);
         // auto payload = this->generate_sequence_bytes(this->packet_size);
         bool success = this->broker->send(payload.data(), payload.size());
@@ -30,6 +39,7 @@ void Producer::loop()
             std::cerr << "[Producer] Failed to send packet #" << (i + 1) << "\n";
         }
 
+        i++;
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
