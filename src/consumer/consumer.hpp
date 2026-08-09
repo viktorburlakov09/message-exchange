@@ -5,10 +5,10 @@
 
 
 class Consumer {
-    private:
-        Broker* broker;
-
     public:
         Consumer(Broker* broker);
         void loop();
+    
+    private:
+        Broker* broker;
 };

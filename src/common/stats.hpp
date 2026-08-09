@@ -6,14 +6,6 @@
 
 
 class TrafficStats {
-    private:
-        size_t total_packets = 0;
-        size_t packets_this_second = 0;
-        size_t bytes_this_second = 0;
-
-        std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
-        std::string prefix;
-
     public:
         explicit TrafficStats(std::string app_prefix = "[Stats]") : prefix(std::move(app_prefix)) {}
 
@@ -28,9 +20,12 @@ class TrafficStats {
             auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current_time - this->last_time).count();
 
             if (elapsed >= 1) {
+                double pkts_per_sec = static_cast<double>(this->packets_this_second) / elapsed;
+                double bytes_per_sec = static_cast<double>(this->bytes_this_second) / elapsed;
+
                 std::cout << prefix << " Total: " << this->total_packets
-                          << " | Pkts/sec: " << this->packets_this_second
-                          << " | Bytes/sec: " << this->bytes_this_second << " B/s\n";
+                        << " | Pkts/sec: " << pkts_per_sec 
+                        << " | Bytes/sec: " << static_cast<uint64_t>(bytes_per_sec) << " B/s\n";
 
                 this->packets_this_second = 0;
                 this->bytes_this_second = 0;
@@ -41,4 +36,12 @@ class TrafficStats {
         void reset_timer() {
             this->last_time = std::chrono::steady_clock::now();
         }
+
+    private:
+        size_t total_packets = 0;
+        size_t packets_this_second = 0;
+        size_t bytes_this_second = 0;
+
+        std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
+        std::string prefix;
 };

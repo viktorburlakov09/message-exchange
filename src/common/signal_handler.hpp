@@ -5,16 +5,6 @@
 #include <iostream>
 
 class SignalHandler {
-    private:
-        inline static std::atomic<bool> shutdown_requested{false};
-
-        static void handle_signal(int signal) {
-            if (signal == SIGINT || signal == SIGTERM) {
-                std::cout << "\n[Signal] Caught stop signal (SIGINT/SIGTERM). Exiting...\n";
-                shutdown_requested = true;
-            }
-        }
-
     public:
         SignalHandler() {
             std::signal(SIGINT, SignalHandler::handle_signal);
@@ -27,5 +17,15 @@ class SignalHandler {
 
         static void request_shutdown() {
             shutdown_requested = true;
+        }
+
+    private:
+        inline static std::atomic<bool> shutdown_requested{false};
+
+        static void handle_signal(int signal) {
+            if (signal == SIGINT || signal == SIGTERM) {
+                std::cout << "\n[Signal] Caught stop signal (SIGINT/SIGTERM). Exiting...\n";
+                shutdown_requested = true;
+            }
         }
 };

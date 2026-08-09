@@ -1,11 +1,14 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <iomanip>
 #include <cstdint>
 
+
 namespace Utils::Bytes {
 
-    void print_bytes(const std::vector<uint8_t>& data, size_t size) {
+    inline void print_bytes(const std::vector<uint8_t>& data, size_t size) {
         std::cout << "[Data Hex]: ";
 
         size_t limit = std::min(size, data.size());

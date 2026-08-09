@@ -1,4 +1,6 @@
 #include "namedpipe.hpp"
+#include <iostream>
+#include <unistd.h>
 
 
 PosixPipeTransport::PosixPipeTransport(const std::string& pipe_path, int flags)
@@ -15,34 +17,27 @@ PosixPipeTransport::~PosixPipeTransport() {
 }
 
 
-bool PosixPipeTransport::send(const Packet* packet) {
-    if (this->fd == -1 || packet == nullptr) {
+bool PosixPipeTransport::send(const uint8_t* data, size_t size) {
+    if (this->fd == -1 || data == nullptr || size == 0) {
         return false;
     }
 
-    size_t total_size = sizeof(uint16_t) + packet->size;
-    ssize_t bytes_written = write(this->fd, packet, total_size);
-
-    return bytes_written == static_cast<ssize_t>(total_size);
+    ssize_t bytes_written = write(this->fd, data, size);
+    return bytes_written == static_cast<ssize_t>(size);
 }
 
 
-bool PosixPipeTransport::recv(Packet* packet) {
-    if (this->fd == -1 || packet == nullptr) {
+bool PosixPipeTransport::recv(uint8_t* buffer, size_t max_size, size_t& out_size) {
+    if (this->fd == -1 || buffer == nullptr || max_size == 0) {
         return false;
     }
 
-    ssize_t bytes_read = read(this->fd, &packet->size, sizeof(packet->size));
+    ssize_t bytes_read = read(this->fd, buffer, max_size);
     
-    if (bytes_read != static_cast<ssize_t>(sizeof(packet->size))) {
+    if (bytes_read <= 0) {
         return false;
     }
 
-    if (packet->size > MAX_SIZE) {
-        return false;
-    }
-
-    bytes_read = read(this->fd, packet->payload, packet->size);
-
-    return bytes_read == static_cast<ssize_t>(packet->size);
+    out_size = static_cast<size_t>(bytes_read);
+    return true;
 }

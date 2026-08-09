@@ -25,16 +25,17 @@ void Consumer::loop() {
 
     int i = 0;
 
+    std::vector<uint8_t> buffer(256*1000);
+    
     while (!SignalHandler::is_shutdown() && key_handler.is_running()) {
         if (key_handler.is_paused()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
-        std::vector<uint8_t> buffer(8192);
-        size_t received_size = 0;
+        size_t received_size = buffer.size();
 
-        if (this->broker->recv(buffer.data(), buffer.size(), received_size)) {
+        if (this->broker->recv(buffer.data(), received_size)) {
             stats.add_packet(received_size);
             // std::cout << "Message received successfully! (" << received_size << " bytes)\n";
             // std::cout << "Data: ";

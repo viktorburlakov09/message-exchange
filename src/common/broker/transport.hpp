@@ -3,21 +3,11 @@
 #include <cstddef>
 #include <cstdint>
 
-#define MAX_SIZE 8192
-
-
-#pragma pack(push, 1)
-struct Packet {
-    uint16_t size;
-    uint8_t payload[MAX_SIZE];
-};
-#pragma pack(pop)
-
 
 class Transport {
     public:
         virtual ~Transport() = default;
 
-        virtual bool send(const Packet* packet) = 0;
-        virtual bool recv(Packet* packet) = 0;
+        virtual bool send(const uint8_t* data, size_t size) = 0;
+        virtual bool recv(uint8_t* buffer, size_t max_size, size_t& out_size) = 0;
 };

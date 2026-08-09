@@ -4,10 +4,10 @@
 #include "producer.hpp"
 #include <unistd.h>
 #include <fcntl.h>
-#include <common/broker/transports/namedpipe.hpp>
-#include <common/broker/broker.hpp>
 #include <common/args.hpp>
-#include <signal_handler.hpp>
+#include <common/broker/broker.hpp>
+#include <common/broker/transports/namedpipe.hpp>
+#include <common/signal_handler.hpp>
 
 
 int main(int argc, char* argv[]) {
@@ -20,13 +20,12 @@ int main(int argc, char* argv[]) {
     std::string pipe_name = parser.get_string("--pipe", "my_pipe");
     size_t packet_size = parser.get_size_t("--size", 10);
 
-    PosixPipeTransport transport(pipe_name);
-    MessageBroker broker(&transport);
+    PosixPipeTransport transport(pipe_name, O_WRONLY);
+    MessageBroker broker(&transport, 256 * 1024);
     Producer producer(&broker, packet_size);
 
     std::cout << "Sending message...\n";
-    
     producer.loop();
-    
+
     return 0;
 }

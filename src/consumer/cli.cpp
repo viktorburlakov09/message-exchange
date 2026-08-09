@@ -7,6 +7,7 @@
 #include <common/broker/broker.hpp>
 #include <common/args.hpp>
 #include <common/signal_handler.hpp>
+#include <bits/chrono.h>
 
 
 int main(int argc, char* argv[]) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
     std::string pipe_name = parser.get_string("--pipe", "my_pipe");
 
     PosixPipeTransport transport(pipe_name, O_RDONLY);
-    MessageBroker broker(&transport);
+    MessageBroker broker(&transport, 256 * 1024);
     Consumer consumer(&broker);
 
     std::cout << "Receiving message...\n";
