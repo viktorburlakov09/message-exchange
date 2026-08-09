@@ -1,7 +1,7 @@
-# Test task 1
+# Test task 1: Розробка системи для передачі структурованих даних між двома процесами (Producer та Consumer)
 
 
-# Результати
+## Результати
 
 Максимально досягнута пропускна здатність (14,658 пак/с |  ~120.08 МБ/с)
 
@@ -10,6 +10,36 @@
 [Consumer] Total: 5774351 | Pkts/sec: 14658 | Bytes/sec: 120078336 B/s
 
 ```
+
+---
+
+## Структура вихідних файлів проекту (`src/`)
+
+* **`src/common/`** — Загальні утиліти, структура повідомлень та логіка брокера:
+  * `src/common/broker/transports/namedpipe.cpp` — Реалізація транспорту через іменовані канали (Named Pipes).
+  * `src/common/broker/transports/namedpipe.hpp` — Заголовочний файл іменованих каналів.
+  * `src/common/broker/broker.cpp` — Основна логіка брокера повідомлень.
+  * `src/common/broker/broker.hpp` — Заголовочний файл брокера.
+  * `src/common/broker/message.hpp` — Визначення структури та формату повідомлення.
+  * `src/common/broker/transport.hpp` — Базовий інтерфейс транспортного рівня.
+  * `src/common/args.hpp` — Парсинг та обробка аргументів командного рядка.
+  * `src/common/bytes.hpp` — Утиліти для роботи з байтами та буферами.
+  * `src/common/crc.hpp` — Розрахунок контрольних сум (CRC) для валідації даних.
+  * `src/common/keyboard_handler.hpp` — Обробка подій клавіатури (пауза, вихід).
+  * `src/common/random_generator.hpp` — Генератор випадкових даних/повідомлень.
+  * `src/common/signal_handler.hpp` — Перехоплення системних сигналів (SIGINT тощо).
+  * `src/common/stats.hpp` — Збір і виведення метрик продуктивності (пакети/с, байти/с).
+  * `src/common/time.hpp` — Високоточні вимірювання часу.
+
+* **`src/consumer/`** — Компонент приймача (Subscriber/Consumer):
+  * `src/consumer/cli.cpp` — Інтерфейс командного рядка для споживача.
+  * `src/consumer/consumer.cpp` — Основна логіка отримання та обробки потоку даних.
+  * `src/consumer/consumer.hpp` — Заголовочний файл споживача.
+
+* **`src/producer/`** — Компонент відправника (Publisher/Producer):
+  * `src/producer/cli.cpp` — Інтерфейс командного рядка для виробника.
+  * `src/producer/producer.cpp` — Основна логіка генерації та відправки потоку даних.
+  * `src/producer/producer.hpp` — Заголовочний файл виробника.
 
 ---
 
